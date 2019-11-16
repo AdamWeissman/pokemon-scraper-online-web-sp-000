@@ -16,7 +16,6 @@ class Pokemon
     new_pok.id = pokemon[0][0]
     new_pok.name = pokemon[0][1]
     new_pok.type = pokemon[0][2]
-    return new_pok
-    binding.pry
+    new_pok
   end
 end
