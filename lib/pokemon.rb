@@ -1,27 +1,24 @@
-class Pokemon
+  attr_accessor :id, :name, :type, :db
+  @@all = []
   
-  attr_accessor :id, :name, :type, :db 
-  
-  def initialize (id=nil, name=nil, type=nil, db=nil)
-    @id=id 
-    @name=name 
-    @type=type
-    @db=db
+    def initialize(id:, name:, type:, db:)
+      @id = id
+      @name = name
+      @type = type
+      @db = db 
+      @@all << self
+    end
+    
+    def self.save(name, type, db)
+      db.execute("INSERT INTO pokemon (name, type) VALUES (?, ?);", name, type)
+    end 
+
+    def self.find(id, database_connection)
+    pokemon = database_connection.execute("SELECT * FROM pokemon WHERE id = ?", id).flatten
+    name = pokemon[1]
+    type = pokemon[2]
+    db = pokemon[3]
+    
+    pokemon_inst = Pokemon.new(id: id, name: name, type: type, db: database_connection)
   end
-  
-  def self.save(name, type, db)
-    sql = <<-SQL
-      INSERT INTO pokemon (name, type)
-      VALUES (?, ?)
-    SQL
-    db.execute(sql, name, type)
-    @id = db.execute("SELECT last_insert_rowid() FROM pokemon")
-  end
-  
-  def self.find(id, db)
-    sql = "SELECT * FROM pokemon WHERE id = ?"
-    result = db.execute(sql, id)[0]
-    Pokemon.new(result[0], result[1], result[2])
-  end
-end
   
