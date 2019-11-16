@@ -22,3 +22,5 @@
     pokemon_inst = Pokemon.new(id: id, name: name, type: type, db: database_connection)
   end
   
+end
+  
